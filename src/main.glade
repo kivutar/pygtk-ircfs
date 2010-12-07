@@ -148,9 +148,19 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkTextView" id="mainTextView">
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <widget class="GtkTextView" id="mainTextView">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="editable">False</property>
+                <property name="wrap_mode">word</property>
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="position">1</property>
@@ -160,7 +170,7 @@
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
-              <widget class="GtkEntry" id="entry1">
+              <widget class="GtkEntry" id="mainEntry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">•</property>
@@ -170,7 +180,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="button1">
+              <widget class="GtkButton" id="sendButton">
                 <property name="label" translatable="yes">Envoyer</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

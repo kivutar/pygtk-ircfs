@@ -7,7 +7,5 @@ Usage
 -----
 
     touch /tmp/foo
-    python pygtk-ircfs.py /tmp/foo
-
-    echo 'Hi' > /tmp/foo
+    python pygtk-ircfs.py ~irc/irc.freenode.org/#soul9
 
