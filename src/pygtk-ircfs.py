@@ -1,29 +1,24 @@
 #!/usr/bin/env python
 
 import os, sys
+from time import sleep
 from threading import Thread
-from pyinotify import *
 import pygtk
 pygtk.require('2.0')
 import gtk
 import gtk.glade
 
 def Monitor(path, gui):
-    class PModify(ProcessEvent):
-        def process_IN_MODIFY(self, event):
+    oldmtime = None
+    while 1:
+        sleep(0.1)
+        newmtime = os.stat(path+'/out')[8]
+        if newmtime != oldmtime:
             f = open(path+'/out', 'r')
             gui.textbuffer.set_text(f.read())
             f.close()
             gui.scrolltoend()
-
-    wm = WatchManager()
-    notifier = Notifier(wm, PModify())
-    wm.add_watch(path+'/out', IN_MODIFY)
-
-    while 1:
-        notifier.process_events()
-        if notifier.check_events():
-            notifier.read_events()
+        oldmtime = newmtime
 
 class GUI():
     def __init__(self, path):
@@ -44,6 +39,7 @@ class GUI():
         self.sendbutton.connect("clicked", self.on_send)
 
         self.window.show_all()
+        self.scrolltoend()
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
@@ -59,8 +55,10 @@ class GUI():
         f.close()
 
     def scrolltoend(self):
+        print "scroooollll"
         adjustment = self.scrolledwindow.get_vadjustment()
         upper = adjustment.get_upper()
+        print upper
         adjustment.set_value(upper)
 
     def main(self):
