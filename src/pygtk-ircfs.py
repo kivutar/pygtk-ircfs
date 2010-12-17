@@ -55,10 +55,8 @@ class GUI():
         f.close()
 
     def scrolltoend(self):
-        print "scroooollll"
         adjustment = self.scrolledwindow.get_vadjustment()
         upper = adjustment.get_upper()
-        print upper
         adjustment.set_value(upper)
 
     def main(self):
