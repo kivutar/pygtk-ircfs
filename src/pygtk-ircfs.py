@@ -2,11 +2,13 @@
 
 import os, sys
 from time import sleep
+import re
 from threading import Thread
 import pygtk
 pygtk.require('2.0')
 import gtk
 import gtk.glade
+from glib import markup_escape_text
 
 def Monitor(path, gui):
     oldmtime = None
@@ -14,10 +16,17 @@ def Monitor(path, gui):
         sleep(0.1)
         newmtime = os.stat(path+'/out')[8]
         if newmtime != oldmtime:
-            f = open(path+'/out', 'r')
-            gui.textbuffer.set_text(f.read())
-            f.close()
-            gui.scrolltoend()
+            try:
+                f = open(path+'/out', 'r')
+                text = f.read()
+                text = markup_escape_text(text)
+                name = re.compile('(....-..-..) (..:..) (&lt;.*?&gt;)', re.M)
+                text = re.sub(name, r'<span foreground="grey">\2</span> <span foreground="blue"><b>\3</b></span>', text)
+                gui.mainlabel.set_markup(text)
+                f.close()
+                gui.scrolltoend()
+            except Exception as e:
+                print e
         oldmtime = newmtime
 
 class GUI():
@@ -27,19 +36,14 @@ class GUI():
         self.tree           = gtk.glade.XML('main.glade')
         self.window         = self.tree.get_widget("mainWindow")
         self.scrolledwindow = self.tree.get_widget("mainScrolledWindow")
-        self.textview       = self.tree.get_widget("mainTextView")
+        self.mainlabel      = self.tree.get_widget("mainLabel")
         self.mainentry      = self.tree.get_widget("mainEntry")
         self.sendbutton     = self.tree.get_widget("sendButton")
-
-        self.textbuffer = gtk.TextBuffer()
-        self.textview.set_buffer(self.textbuffer)
-        self.textbuffer.set_text('bar')
 
         self.window.connect("destroy", self.on_destroy)
         self.sendbutton.connect("clicked", self.on_send)
 
         self.window.show_all()
-        self.scrolltoend()
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
