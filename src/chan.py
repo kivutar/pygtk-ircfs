@@ -33,7 +33,7 @@ class GUI():
     def __init__(self, path):
         self.path = path
 
-        self.tree           = gtk.glade.XML('main.glade')
+        self.tree           = gtk.glade.XML('chan.glade')
         self.window         = self.tree.get_widget("mainWindow")
         self.scrolledwindow = self.tree.get_widget("mainScrolledWindow")
         self.mainlabel      = self.tree.get_widget("mainLabel")

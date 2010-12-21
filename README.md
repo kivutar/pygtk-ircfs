@@ -1,11 +1,12 @@
-A pyGTK GUI for go-ircfs
-========================
+A pyGTK GUI for go-ircfs and ii
+===============================
 
 Work in progress.
 
 Usage
 -----
 
-    touch /tmp/foo
-    python pygtk-ircfs.py ~irc/irc.freenode.org/#soul9
+    ii -s irc.freenode.org -n Kivii
+    cd src
+    ./list.py ~irc
 

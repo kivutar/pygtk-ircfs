@@ -2,12 +2,10 @@
 
 import os, sys
 from time import sleep
-import re
 from threading import Thread
 import pygtk
 pygtk.require('2.0')
 import gtk
-import gtk.glade
 
 def Monitor(path, gui):
     while 1:
@@ -32,7 +30,6 @@ class GUI():
         self.tvcolumn.add_attribute(self.cell, 'text', 0)
         self.window.add(self.treeview)
 
-        self.foo = {}
         self.populate(path)
 
         self.window.connect("destroy", self.on_destroy)
@@ -50,7 +47,7 @@ class GUI():
     def on_row_activated(self, widget, path=None, column=None):
         iter = self.treestore.get_iter(path)
         value = self.treestore.get_value(iter, 0)
-        os.popen("./pygtk-ircfs.py " + value + " &")
+        os.popen("./chan.py " + value + " &")
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
