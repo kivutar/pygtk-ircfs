@@ -40,6 +40,8 @@ class GUI():
         self.mainentry      = self.tree.get_widget("mainEntry")
         self.sendbutton     = self.tree.get_widget("sendButton")
 
+        self.window.set_title(path.split('/')[-1:][0])
+
         self.window.connect("destroy", self.on_destroy)
         self.sendbutton.connect("clicked", self.on_send)
 
