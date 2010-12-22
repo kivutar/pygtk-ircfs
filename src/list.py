@@ -60,7 +60,10 @@ class GUI():
         gtk.gdk.flush()
 
 if __name__ == '__main__':
-    path = sys.argv[1]
+    try:
+        path = sys.argv[1]
+    except:
+        path = os.path.expanduser('~/irc')
     gui = GUI(path)
     guithread     = Thread(None, gui.main, None, (),          {})
     monitorthread = Thread(None, Monitor,  None, (path, gui), {})
