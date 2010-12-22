@@ -29,6 +29,7 @@ def Monitor(path, gui):
                 gui.mainlabel.set_markup(text)
                 f.close()
                 gui.scrolltoend()
+                gui.window.set_urgency_hint(True)
             except Exception as e:
                 print e
         oldmtime = newmtime
@@ -47,12 +48,18 @@ class GUI():
         self.window.set_title(path.split('/')[-1:][0])
 
         self.window.connect("destroy", self.on_destroy)
+        self.window.connect("visibility-notify-event", self.on_focus)
+        self.window.connect("window-state-event", self.on_focus)
+        self.window.connect("focus-in-event", self.on_focus)
         self.sendbutton.connect("clicked", self.on_send)
 
         self.window.show_all()
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
+
+    def on_focus(self, widget, data=None):
+        self.window.set_urgency_hint(False)
 
     def on_send(self, widget, data=None):
         message = self.mainentry.get_text()
