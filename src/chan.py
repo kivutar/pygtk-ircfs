@@ -20,10 +20,10 @@ def Monitor(path, gui):
                 f = open(path+'/out', 'r')
                 text = f.read()
                 text = markup_escape_text(text)
-                name = re.compile('(....-..-..) (..:..) (&lt;.*?&gt;)', re.M)
+                name = re.compile('(....-..-..) (..:..) &lt;(.*?)&gt;', re.M)
                 event = re.compile('(....-..-..) (..:..) -!- (.*)', re.M)
                 url = re.compile('(http://[^ |\n]*)', re.M)
-                text = re.sub(name,  r'<span foreground="grey">\2</span> <span foreground="darkgreen"><b>\3</b></span>', text)
+                text = re.sub(name,  r'<span foreground="grey">\2</span> <span foreground="darkgreen">\3:</span>', text)
                 text = re.sub(event, r'<span foreground="grey">\2 -!- \3</span>', text)
                 text = re.sub(url,   r'<a href="\1">\1</a>', text)
                 gui.mainlabel.set_markup(text)
@@ -46,11 +46,13 @@ class GUI():
         self.sendbutton     = self.tree.get_widget("sendButton")
 
         self.window.set_title(path.split('/')[-1:][0])
+        self.mainentry.set_activates_default(True)
 
         self.window.connect("destroy", self.on_destroy)
         self.window.connect("visibility-notify-event", self.on_focus)
         self.window.connect("window-state-event", self.on_focus)
         self.window.connect("focus-in-event", self.on_focus)
+        self.mainentry.connect("activate", self.on_send)
         self.sendbutton.connect("clicked", self.on_send)
 
         self.window.show_all()
